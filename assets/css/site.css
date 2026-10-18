@@ -745,3 +745,57 @@ body,.marquee{background:#FFFFFF}
 .ai-head .ai-dot{background:rgba(255,255,255,.18);color:#fff}
 .ai-log{background:#F5F8FF}
 .post-card .cover{background:#1E5EFF}
+
+/* =================== v7 "Calm Sapphire" — softer blue, real contrast =================== */
+:root{--text:#0E1A35;--muted:#4B5875;--muted-2:#6E7A93;--line:#E1E7F1;--line-2:#D3DCEA;
+  --primary:#2856E8;--primary-2:#1E45C8;
+  --grad-btn:linear-gradient(135deg,#3366F0 0%,#2856E8 50%,#1E45C8 100%);
+  --gold-grad:linear-gradient(120deg,#1E45C8 0%,#2856E8 50%,#3D8BEB 100%)}
+body{background:#F6F8FC;color:#0E1A35}
+.marquee{background:#F6F8FC;border-color:#E1E7F1}
+.marquee-track span{color:#8D99B2}
+.section-alt{background:#EDF2F9;border-color:#E1E7F1}
+.card,.stat,.step,.ind,.svc-link,.faq details,.channel,.panel,.post-card,.toc,.console,.filters,.table-wrap,.match,.why{background:#FFFFFF;border-color:#E1E7F1;box-shadow:0 1px 2px rgba(14,26,53,.04),0 8px 24px rgba(14,26,53,.06)}
+.card:hover,.svc-link:hover,.post-card:hover{border-color:#C9D5EA;box-shadow:0 18px 44px rgba(14,26,53,.10)}
+h1,h2,h3,h4,h5,h6{color:#0E1A35}
+.eyebrow{color:#2856E8}
+/* calmer topbar */
+.topbar{background:#0E1A35;color:#C3CDE2}
+.topbar a{color:#DDE4F2}.topbar i{color:#7FA5F5}
+/* hero: soft gradient, less glare */
+.hero2{background:radial-gradient(900px 520px at 90% -15%,rgba(40,86,232,.14),transparent 60%),radial-gradient(700px 480px at -5% 105%,rgba(61,139,235,.10),transparent 60%),linear-gradient(180deg,#EAF0FB 0%,#F6F8FC 100%)}
+.page-hero{background:radial-gradient(700px 380px at 92% -10%,rgba(40,86,232,.13),transparent 60%),linear-gradient(180deg,#EAF0FB,#F6F8FC);border-bottom:1px solid #E1E7F1}
+.grid-lines,.page-hero:before{background-image:linear-gradient(rgba(40,86,232,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(40,86,232,.05) 1px,transparent 1px)}
+.orb.o1{background:#2856E8;opacity:.12}.orb.o2{background:#3D8BEB;opacity:.10}.orb.o3{opacity:.05}
+.hero2 .gold-text,.page-hero .gold-text,.gold-text,.rotator{background:linear-gradient(110deg,#1E45C8 0%,#2856E8 45%,#3D8BEB 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-panel{background:#E1E7F1;border-color:#DCE3EF;box-shadow:0 18px 50px rgba(14,26,53,.08)}
+.hero-checks i,.check-list i{color:#2856E8}
+.check-list i{background:#E9EFFC}
+.card .ic,.ind i,.svc-link i.si,.mega a i{background:#EDF2FD;color:#2856E8;border-color:#DCE5FA}
+.card .ic.gold,.tag.gold,.pill b{background:var(--gold-grad);color:#fff}
+.btn-gold,.btn-violet,.hero2 .btn-gold,.page-hero .btn-gold{background:var(--grad-btn);box-shadow:0 8px 22px rgba(40,86,232,.28),inset 0 1px 0 rgba(255,255,255,.28)}
+.btn-gold:hover,.hero2 .btn-gold:hover,.page-hero .btn-gold:hover{background:var(--grad-btn);box-shadow:0 12px 30px rgba(40,86,232,.36),inset 0 1px 0 rgba(255,255,255,.28)}
+.card.featured{border:2px solid #2856E8;box-shadow:0 20px 48px rgba(40,86,232,.14)}
+.brand-name{color:#0E1A35}.brand-name span{background:linear-gradient(110deg,#2856E8,#3D8BEB);-webkit-background-clip:text;background-clip:text;color:transparent}
+.site-header{background:rgba(255,255,255,.94);border-bottom-color:#E1E7F1}
+/* contrast band (dark navy section) */
+.band{background:radial-gradient(700px 360px at 85% 0%,rgba(61,139,235,.22),transparent 60%),linear-gradient(180deg,#0E1A35,#13234A);border:0;--text:#F2F5FB;--muted:#B9C4DA;--muted-2:#8F9BB6;--line:rgba(255,255,255,.1)}
+.band h2,.band h3{color:#F2F5FB}
+.band .eyebrow{color:#8FB3F7}.band .eyebrow:before{background:linear-gradient(90deg,#8FB3F7,#3D8BEB)}
+.band .head p{color:#B9C4DA}
+.band .step{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);box-shadow:none}
+.band .step p{color:#B9C4DA}
+.band .step:before{background:linear-gradient(110deg,#8FB3F7,#5FA8F5);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* footer: deep navy-black, calm */
+.site-footer2{background:#0B1222}
+.f-cta{background:radial-gradient(500px 220px at 100% 0%,rgba(61,139,235,.35),transparent 60%),linear-gradient(120deg,#1E45C8,#2856E8 60%,#3366F0);box-shadow:0 26px 60px rgba(14,26,53,.35)}
+.f-cta .btn-gold{color:#1E45C8}
+.f-main h4{color:#8FB3F7}.f-main .f-links a.more,.f-main .f-contact i{color:#8FB3F7}
+.why th.us{background:linear-gradient(120deg,#1E45C8,#2856E8)}
+.why td.us{background:#F1F5FD;color:#1E45C8}.why td.us i{color:#2856E8}
+.ai-head{background:linear-gradient(120deg,#0E1A35,#1E45C8)}
+.ai-log{background:#F3F6FB}
+.msg.me,.ai-form button{background:linear-gradient(120deg,#2856E8,#1E45C8)}
+.post-card .cover{background:#13234A}
+.lsel-menu a.on{background:#EDF2FD;color:#1E45C8!important}
+.hsel summary i.fa-globe{color:#2856E8}
