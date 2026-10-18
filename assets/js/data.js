@@ -14,6 +14,7 @@ var SITE = {
   phone: "+92 307 4646927",
   email: "nadeemonlin@gmail.com",
   ceoEmail: "ceo@mayotechx.com",
+  chatbaseId: "",   /* paste your Chatbase chatbot ID here to switch on the full AI chatbot */
   social: {
     linkedin: "https://www.linkedin.com/in/menadeemmayos/",
     facebook: "https://www.facebook.com/share/19aDt6pcgh/",

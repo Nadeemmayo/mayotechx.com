@@ -129,6 +129,14 @@
     } b.addEventListener('input',runB); runB(); }
   }
 
+  /* ---------- v2 extras: rotator, clocks, card glow ---------- */
+  function extras(){
+    var r=$('#rotator'); if(r){ var w=JSON.parse(r.getAttribute('data-words')),i=0; setInterval(function(){ r.classList.add('out'); setTimeout(function(){ i=(i+1)%w.length; r.textContent=w[i]; r.classList.remove('out'); },350); },2600); }
+    var zs=$$('[data-tz]'); function tick(){ zs.forEach(function(z){ try{ z.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:z.getAttribute('data-tz')}); }catch(e){} }); }
+    if(zs.length){ tick(); setInterval(tick,30000); }
+    $$('.card').forEach(function(c){ c.addEventListener('mousemove',function(e){ var b=c.getBoundingClientRect(); c.style.setProperty('--mx',(e.clientX-b.left)+'px'); c.style.setProperty('--my',(e.clientY-b.top)+'px'); }); });
+  }
+
   /* ---------- real orders ticker ---------- */
   function orders(){
     var el=$('#orders'); if(!el||!ORDERS||!ORDERS.length) return;
@@ -137,7 +145,7 @@
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    chrome(); forms(); market(); heroConsole(); tools(); orders();
+    chrome(); forms(); market(); heroConsole(); tools(); orders(); extras();
     var t=$('#finderForm'); if(t){ var q=new URLSearchParams(location.search).get('topic'); if(q) t.topic.value=q; } finder();
     reveal();
   });
