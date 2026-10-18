@@ -1,0 +1,42 @@
+# MayoTechX
+
+> MayoTechX is a global, remote-first technology company founded by Nadeem Mayo. It provides SEO, link building, digital PR, Google/Meta/TikTok ads, web, WordPress and e-commerce development, custom software and SaaS, mobile apps, UI/UX design and AI chatbots & automation for brands worldwide. Contact: nadeemonlin@gmail.com · WhatsApp +92 307 4646927.
+
+## Services
+- [SEO Services](https://mayotechx.com/seo.html): Full-funnel search growth for brands
+- [Local SEO](https://mayotechx.com/local-seo.html): Win the map pack in your city
+- [Technical SEO](https://mayotechx.com/technical-seo.html): Speed, crawlability and Core Web Vitals
+- [SEO Content Writing](https://mayotechx.com/content-writing.html): Content that ranks and converts
+- [Managed Link Building](https://mayotechx.com/link-building.html): Monthly campaigns, strategy to reporting
+- [Guest Posting](https://mayotechx.com/guest-posting.html): Real articles on high-traffic sites
+- [Niche Edits](https://mayotechx.com/niche-edits.html): Links inside aged, indexed content
+- [Digital PR](https://mayotechx.com/digital-pr.html): Features on news and media outlets
+- [White-Label for Agencies](https://mayotechx.com/white-label.html): Your brand, our fulfilment
+- [Google Ads](https://mayotechx.com/google-ads.html): Search, Performance Max & Shopping
+- [Meta Ads](https://mayotechx.com/meta-ads.html): Facebook & Instagram advertising
+- [TikTok Ads](https://mayotechx.com/tiktok-ads.html): Creative-first short-video campaigns
+- [Web Development](https://mayotechx.com/web-development.html): Fast, custom, SEO-ready websites
+- [WordPress Development](https://mayotechx.com/wordpress-development.html): Custom themes, plugins & speed
+- [E-commerce Development](https://mayotechx.com/ecommerce-development.html): Shopify & WooCommerce stores
+- [Custom Software & SaaS](https://mayotechx.com/custom-software.html): Web apps, portals and SaaS platforms
+- [Mobile App Development](https://mayotechx.com/mobile-apps.html): iOS & Android apps
+- [UI/UX Design](https://mayotechx.com/ui-ux-design.html): Product and website design
+- [AI Chatbots & Automation](https://mayotechx.com/ai-automation.html): AI assistants and workflow automation
+
+## Company
+- [About](https://mayotechx.com/about.html)
+- [Contact](https://mayotechx.com/contact.html)
+- [Pricing](https://mayotechx.com/packages.html)
+- [Publisher marketplace](https://mayotechx.com/marketplace.html)
+- [FAQ](https://mayotechx.com/faq.html)
+
+## Guides
+- [How Much Does SEO Cost in 2026? Pricing Models Explained](https://mayotechx.com/blog/how-much-does-seo-cost.html): What SEO really costs in 2026: retainers, projects, hourly and per-link pricing, what drives the price, and how to judge whether a quote is good value.
+- [Guest Posting in 2026: How to Build Links That Still Move Rankings](https://mayotechx.com/blog/guest-posting-guide.html): A practical guide to guest posting in 2026: how to choose publishers, metrics that matter, anchor text, content quality and how to avoid links that hurt.
+- [Google Ads vs Meta Ads: Where Should Your Budget Go?](https://mayotechx.com/blog/google-ads-vs-meta-ads.html): Google Ads captures demand; Meta Ads creates it. Learn when to use each, how budgets usually split, and how to measure both properly.
+- [How to Get Cited in AI Search: Google AI Overviews, ChatGPT & Perplexity](https://mayotechx.com/blog/ai-search-optimisation.html): How AI search engines choose which brands to cite, and the practical steps — content, structure, authority and technical — to be included in AI answers.
+- [How to Choose a Software Development Partner: 12 Questions to Ask](https://mayotechx.com/blog/choose-software-development-partner.html): Twelve questions to ask before hiring a software development company — covering process, ownership, security, communication, pricing and support.
+- [AI Chatbots for Business: What They Can (and Can’t) Do](https://mayotechx.com/blog/ai-chatbots-for-business.html): A practical look at AI chatbots for websites and WhatsApp: realistic use cases, limits, costs, data privacy and how to launch one that customers actually use.
+
+## Languages
+- English (root), Arabic (/ar/), German (/de/), French (/fr/), Italian (/it/), Japanese (/ja/), Chinese (/zh/)

@@ -10,7 +10,7 @@
   function chrome(){
     var hdr=$('.site-header'), top=$('#toTop'), mm=$('#mobileMenu'), bg=$('#burger');
     if(bg) bg.addEventListener('click',function(){var o=mm.classList.toggle('open');bg.setAttribute('aria-expanded',o);bg.innerHTML=o?'<i class="fas fa-xmark"></i>':'<i class="fas fa-bars"></i>';document.body.style.overflow=o?'hidden':''});
-    window.addEventListener('scroll',function(){ if(top) top.classList.toggle('show',scrollY>600); });
+    var hdr=$('#siteHeader'); window.addEventListener('scroll',function(){ if(top) top.classList.toggle('show',scrollY>600); if(hdr) hdr.classList.toggle('scrolled',scrollY>10); },{passive:true});
     if(top) top.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'})});
     var fab=$('#fab'), fb=$('#fabBtn');
     if(fb){ fb.addEventListener('click',function(){var o=fab.classList.toggle('open');fb.setAttribute('aria-expanded',o);fb.innerHTML=o?'<i class="fas fa-xmark"></i>':'<i class="fab fa-whatsapp"></i>'}); }

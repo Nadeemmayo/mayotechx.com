@@ -7,9 +7,10 @@
      chatbot ID in SITE.chatbaseId in assets/js/data.js.
    ========================================================= */
 (function(){
-  var LANG=(document.documentElement.lang||'en').slice(0,2); if(['en','ar','de'].indexOf(LANG)<0) LANG='en';
-  var TRP=['index.html','services.html','seo.html','link-building.html','google-ads.html','meta-ads.html','web-development.html','custom-software.html','ai-automation.html','about.html','contact.html'];
-  function href(slug){ if(LANG==='en') return slug; return TRP.indexOf(slug)>=0?slug:'../'+slug; }
+  var DE_=document.documentElement;
+  var LANG=(DE_.lang||'en').slice(0,2); if(['en','ar','de','fr','it','ja','zh'].indexOf(LANG)<0) LANG='en';
+  var TRP=(DE_.getAttribute('data-tr')||'').split(',').filter(Boolean), BASE_=DE_.getAttribute('data-base')||'';
+  function href(slug){ return TRP.indexOf(slug)>=0 ? slug : BASE_+slug; }
   function T(o){ return (o&&(o[LANG]||o.en))||''; }
 
   var UI={
@@ -220,6 +221,14 @@
     offer:{en:'What do you offer?',ar:'ماذا تقدمون؟',de:'Was bieten Sie an?'},founder:{en:'Who founded MayoTechX?',ar:'من أسس الشركة؟',de:'Wer hat MayoTechX gegründet?'}
   };
 
+  /* ---------- merge extra languages (assistant-i18n.js) ---------- */
+  (function(X){ if(!X) return; Object.keys(X).forEach(function(lg){ var d=X[lg];
+    if(d.ui) Object.keys(d.ui).forEach(function(k){ if(UI[k]) UI[k][lg]=d.ui[k]; });
+    if(d.pg) Object.keys(d.pg).forEach(function(k){ if(PG[k]) PG[k][lg]=d.pg[k]; });
+    if(d.follow) Object.keys(d.follow).forEach(function(k){ if(FOLLOW[k]) FOLLOW[k][lg]=d.follow[k]; });
+    KB.forEach(function(e){ if(d.a&&d.a[e.id]) e.a[lg]=d.a[e.id]; if(d.k&&d.k[e.id]) e.k=e.k.concat(d.k[e.id]); });
+  }); })(window.MX_I18N);
+
   /* ---------- matching ---------- */
   function norm(s){return String(s).toLowerCase().replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[?!.,؟،;:()"'“”„«»\/-]/g,' ').replace(/\s+/g,' ').trim()}
   function lev(a,b){ if(Math.abs(a.length-b.length)>1) return 2; var m=[],i,j; for(i=0;i<=a.length;i++){m[i]=[i]} for(j=0;j<=b.length;j++){m[0][j]=j}
@@ -227,6 +236,7 @@
   function score(q,e){
     var nq=norm(q), s=' '+nq+' ', words=nq.split(' '), sc=0;
     e.k.forEach(function(k){ var nk=norm(k);
+      if(/[\u3040-\u30ff\u4e00-\u9fff]/.test(nk)){ if(nq.indexOf(nk)>=0) sc+=2.5; return; }
       if(s.indexOf(' '+nk+' ')>=0||(nk.length>=3&&s.indexOf(' '+nk+'s ')>=0)||s.indexOf(' ال'+nk+' ')>=0) sc+= nk.indexOf(' ')>0?4:(nk.length>=3?2.5:1.5);
       else if(nk.length>=6&&s.indexOf(nk)>=0) sc+=1.5;
       else if(nk.indexOf(' ')<0&&nk.length>=5){ for(var i=0;i<words.length;i++){ if(words[i].length>=5&&lev(words[i],nk)<=1){sc+=1.5;break;} } }
