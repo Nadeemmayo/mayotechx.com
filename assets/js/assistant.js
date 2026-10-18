@@ -248,8 +248,26 @@
     if(!res.length) return null;
     var top=res[0].e; if(top.id==='hello'&&res.length>1&&res[1].s>=2) top=res[1].e;
     var alt=res.slice(1,3).map(function(r){return r.e.id}).filter(function(id){return id!==top.id&&id!=='hello'&&id!=='thanks'});
-    return {e:top,alt:alt};
+    return {e:top,alt:alt,s:res[0].s};
   }
+  /* ---------- retrieval over the whole website (kb-<lang>.js) ---------- */
+  var STOP={};'the and for you your do does did what how can could are is was with our we a an to of in on my me i it this that be have has will would should about from at by or as any there their them they who which when where why get got want need please tell us also more than just very really de der die das und ist sie ein eine wie was le la les des et est pour vous une un il elle di che per un una il lo gli e del della هل ما من في على كيف عن مع هذا هذه لدي لديكم أريد でき きま ます すか です はで ので には しま ませ いま てい につ つい ても まし した ある あり りま ませ こと とは はい いつ どの の? か? 可以 你们 我们 什么 怎么 是否 的吗 有没 没有 吗? 请问 能否 能不 不能 一下'.split(' ').forEach(function(w){STOP[w]=1});
+  var IDX=null, DF={}, ND=0;
+  function toks(t){ var n=norm(t), out=[]; n.split(' ').forEach(function(w){ if(!w) return;
+      if(/[\u3040-\u30ff\u4e00-\u9fff]/.test(w)){ for(var i=0;i<w.length-1;i++){ var bg=w.substr(i,2); if(!STOP[bg]) out.push(bg); } }
+      else if(w.length>=3 && !STOP[w]) out.push(w.replace(/(ing|ers|er|es|s)$/,'')); });
+    return out; }
+  function build(){ IDX=[]; var KBX=window.MX_KB||[]; ND=KBX.length||1;
+    KBX.forEach(function(e){ var set={}; toks(e.t+' '+e.k).forEach(function(t){set[t]=1}); Object.keys(set).forEach(function(t){DF[t]=(DF[t]||0)+1}); IDX.push({e:e,set:set,tt:norm(e.t)}); }); }
+  function retrieve(q){ if(!IDX) build(); if(!IDX.length) return null;
+    var qt=toks(q), nq=norm(q), best=null, bs=0;
+    var cjk=/[\u3040-\u30ff\u4e00-\u9fff]/.test(nq);
+    IDX.forEach(function(d){ var sc=0, hit=0;
+      qt.forEach(function(t){ if(d.set[t]){ sc+=Math.log(1+ND/(DF[t]||1)); hit++; } else if(t.length>=5){ for(var k in d.set){ if(k.length>=5&&(k.indexOf(t)===0||t.indexOf(k)===0)){ sc+=0.6*Math.log(1+ND/(DF[k]||1)); break; } } } });
+      if(nq.length>8 && d.tt.indexOf(nq)>=0) sc+=3;
+      if(qt.length && hit/qt.length < (cjk?0.5:0.3)) sc=0;
+      if(sc>bs){bs=sc;best=d.e;} });
+    return best?{e:best,s:bs}:null; }
 
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function wa(t){return 'https://wa.me/'+SITE.whatsapp+'?text='+encodeURIComponent(t)}
@@ -281,8 +299,11 @@
       if(est) return estStep(q);
       if(/estimate|quote me|تقدير|schätzung/.test(norm(q))) return startEst();
       typing(function(t){
-        var r=answer(q), ans, html;
-        if(r){ ans=T(r.e.a); html=esc(ans)+links(r.e.l)+'<a class="btn btn-wa btn-sm ai-wa" target="_blank" rel="noopener" href="'+wa('Hi MayoTechX, '+q)+'"><i class="fab fa-whatsapp"></i> '+esc(T(UI.ask_team))+'</a>';
+        var r=answer(q), ret=retrieve(q), ans, html;
+        if(ret && ret.s>=3.2 && (!r || r.s<4 || ret.s>r.s*1.6)){
+          ans=ret.e.a; html=esc(ans)+'<div class="ai-links"><a href="'+href(ret.e.l)+'">'+esc(ret.e.t)+' <i class="fas fa-arrow-right"></i></a></div><a class="btn btn-wa btn-sm ai-wa" target="_blank" rel="noopener" href="'+wa('Hi MayoTechX, '+q)+'"><i class="fab fa-whatsapp"></i> '+esc(T(UI.ask_team))+'</a>';
+          if(r) setChips([r.e.id].concat(r.alt||[]).filter(function(x){return FOLLOW[x]}).slice(0,3).map(function(id){var lb=T(FOLLOW[id]);return {label:lb,fn:id==='estimate'?function(){add(esc(lb),'me',lb);startEst()}:null}})); else defaultChips();
+        } else if(r){ ans=T(r.e.a); html=esc(ans)+links(r.e.l)+'<a class="btn btn-wa btn-sm ai-wa" target="_blank" rel="noopener" href="'+wa('Hi MayoTechX, '+q)+'"><i class="fab fa-whatsapp"></i> '+esc(T(UI.ask_team))+'</a>';
           var f=(r.e.f||[]).concat(r.alt||[]).filter(function(x,i,a){return a.indexOf(x)===i&&x!==r.e.id&&FOLLOW[x]}).slice(0,4);
           if(f.length) setChips(f.map(function(id){ var lb=T(FOLLOW[id]); return {label:lb,fn:id==='estimate'?function(){add(esc(lb),'me',lb);startEst()}:null}; })); else defaultChips();
         } else { ans=T(UI.unknown); html=esc(ans)+'<a class="btn btn-wa btn-sm ai-wa" target="_blank" rel="noopener" href="'+wa('Hi MayoTechX, I have a question: '+q)+'"><i class="fab fa-whatsapp"></i> '+esc(T(UI.send_team))+'</a>'; defaultChips(); }
@@ -315,5 +336,5 @@
     if(!ss('mxAiSeen')) setTimeout(function(){ if(opened) return; tip=document.createElement('button'); tip.type='button'; tip.className='ai-tip'; tip.textContent=T(UI.tip); tip.addEventListener('click',function(){toggle(true)}); document.body.appendChild(tip); setTimeout(function(){ if(tip){tip.remove();tip=null;} },9000); },7000);
   }
   document.addEventListener('DOMContentLoaded',init);
-  window.MXAssistantAnswer=answer;
+  window.MXAssistantAnswer=answer; window.MXRetrieve=retrieve;
 })();
