@@ -4,8 +4,8 @@
  "description": "Global technology company \u2014 SEO, ads, web, software & AI",
  "start_url": "/",
  "display": "standalone",
- "background_color": "#061331",
- "theme_color": "#061331",
+ "background_color": "#FFFFFF",
+ "theme_color": "#1E5EFF",
  "icons": [
   {
    "src": "/assets/img/icon-192.png",
