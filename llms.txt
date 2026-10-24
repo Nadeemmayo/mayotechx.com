@@ -1,6 +1,13 @@
 # MayoTechX
 
-> MayoTechX is a global, remote-first technology company founded by Nadeem Mayo. It provides SEO, link building, digital PR, Google/Meta/TikTok ads, web, WordPress and e-commerce development, custom software and SaaS, mobile apps, UI/UX design and AI chatbots & automation for brands worldwide. Contact: nadeemonlin@gmail.com · WhatsApp +92 307 4646927.
+> MayoTechX is a global, remote-first technology and digital growth company: SEO, publisher marketplace (guest posts, niche edits, digital PR), local citations, Google/Meta/TikTok ads, web, WordPress and e-commerce development, custom software, mobile apps, UI/UX and AI automation. Contact: nadeemonlin@gmail.com · WhatsApp +92 307 4646927.
+
+## Platform
+- [Publisher Marketplace](https://mayotechx.com/marketplace.html): searchable publishers by niche, country, language, DA, PA, DR, traffic and price
+- [Business Directories](https://mayotechx.com/directories.html): local, industry and country citation sources
+- [Smart Site Finder](https://mayotechx.com/smart-finder.html): publisher matching with score breakdown
+- [Request a Proposal](https://mayotechx.com/proposal.html)
+- [Pricing & engagement models](https://mayotechx.com/packages.html)
 
 ## Services
 - [SEO Services](https://mayotechx.com/seo.html): Full-funnel search growth for brands
@@ -25,10 +32,11 @@
 
 ## Company
 - [About](https://mayotechx.com/about.html)
-- [Contact](https://mayotechx.com/contact.html)
-- [Pricing](https://mayotechx.com/packages.html)
-- [Publisher marketplace](https://mayotechx.com/marketplace.html)
+- [Industries](https://mayotechx.com/industries.html)
+- [Case studies & methodology](https://mayotechx.com/case-studies.html)
+- [SEO glossary](https://mayotechx.com/seo-glossary.html)
 - [FAQ](https://mayotechx.com/faq.html)
+- [Contact](https://mayotechx.com/contact.html)
 
 ## Guides
 - [How Much Does SEO Cost in 2026? Pricing Models Explained](https://mayotechx.com/blog/how-much-does-seo-cost.html): What SEO really costs in 2026: retainers, projects, hourly and per-link pricing, what drives the price, and how to judge whether a quote is good value.
@@ -40,3 +48,6 @@
 
 ## Languages
 - English (root), Arabic (/ar/), German (/de/), French (/fr/), Italian (/it/), Japanese (/ja/), Chinese (/zh/)
+
+## Notes
+- DA/PA (Moz) and DR (Ahrefs) are third-party metrics, not Google ranking scores. Rankings are never guaranteed.

@@ -1,11 +1,11 @@
 {
  "name": "MayoTechX",
  "short_name": "MayoTechX",
- "description": "Global technology company \u2014 SEO, ads, web, software & AI",
+ "description": "Global technology & digital growth company \u2014 SEO, publisher marketplace, ads, web, software & AI",
  "start_url": "/",
  "display": "standalone",
- "background_color": "#FFFFFF",
- "theme_color": "#2856E8",
+ "background_color": "#08111F",
+ "theme_color": "#08111F",
  "icons": [
   {
    "src": "/assets/img/icon-192.png",

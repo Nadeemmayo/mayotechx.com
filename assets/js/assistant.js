@@ -15,8 +15,8 @@
 
   var UI={
     launch:{en:'Ask MayoTechX',ar:'اسأل MayoTechX',de:'Fragen Sie MayoTechX'},
-    title:{en:'MayoTechX Assistant',ar:'مساعد MayoTechX',de:'MayoTechX Assistent'},
-    sub:{en:'Instant answers · 24/7 · team on WhatsApp',ar:'إجابات فورية · على مدار الساعة · الفريق على واتساب',de:'Sofortantworten · 24/7 · Team per WhatsApp'},
+    title:{en:'MayoTechX AI Assistant',ar:'مساعد MayoTechX الذكي',de:'MayoTechX KI-Assistent'},
+    sub:{en:'AI assistant · answers from our website · humans on WhatsApp',ar:'مساعد آلي · إجابات من محتوى موقعنا · الفريق على واتساب',de:'KI-Assistent · Antworten aus unserer Website · Team per WhatsApp'},
     hello:{en:'Hi! I\'m the MayoTechX assistant. Ask me anything about our services, prices, timelines or how we work — or get a quick estimate.',ar:'مرحبًا! أنا مساعد MayoTechX. اسألني عن خدماتنا أو الأسعار أو المدة أو طريقة عملنا — أو احصل على تقدير سريع.',de:'Hallo! Ich bin der MayoTechX-Assistent. Fragen Sie mich zu Leistungen, Preisen, Zeitrahmen oder unserer Arbeitsweise — oder holen Sie sich eine schnelle Einschätzung.'},
     ph:{en:'Ask anything…',ar:'اكتب سؤالك…',de:'Ihre Frage…'},
     ask_team:{en:'Ask the team',ar:'اسأل الفريق',de:'Team fragen'},
@@ -36,11 +36,11 @@
          de:['SEO','Linkbuilding / PR','Google / Meta Ads','Website / WordPress','Online-Shop','Individualsoftware / SaaS','Mobile App','KI-Chatbot / Automatisierung','Noch unsicher']},
     bud:{en:['Under $1,000','$1k – $5k','$5k – $20k','$20k – $50k','$50k+'],ar:['أقل من 1,000$','1 – 5 آلاف$','5 – 20 ألف$','20 – 50 ألف$','أكثر من 50 ألف$'],de:['Unter 1.000 $','1k – 5k $','5k – 20k $','20k – 50k $','50k+ $']},
     time:{en:['ASAP','Within 1 month','1–3 months','Just exploring'],ar:['في أقرب وقت','خلال شهر','1 – 3 أشهر','أستكشف فقط'],de:['So schnell wie möglich','Innerhalb 1 Monat','1–3 Monate','Nur informieren']},
-    chips:{en:['Get an estimate','What do you offer?','How much does it cost?','Build a website','Google Ads','AI chatbot','Talk to a human'],
+    chips:{en:['Get an estimate','Find guest post sites','Browse directories','Get SEO help','Request a quote','What do DA and DR mean?','Talk to a human'],
            ar:['احصل على تقدير','ماذا تقدمون؟','كم التكلفة؟','بناء موقع','إعلانات Google','روبوت دردشة','تحدث مع شخص'],
            de:['Schätzung erhalten','Was bieten Sie an?','Was kostet das?','Website erstellen','Google Ads','KI-Chatbot','Mit einem Menschen sprechen']}
   };
-  var PG={ 'services.html':{en:'All services',ar:'جميع الخدمات',de:'Alle Leistungen'},'packages.html':{en:'Packages',ar:'الباقات',de:'Pakete'},'contact.html':{en:'Get a quote',ar:'اطلب عرضًا',de:'Angebot anfordern'},
+  var PG={ 'marketplace.html':{en:'Publisher Marketplace',ar:'سوق الناشرين',de:'Publisher-Marktplatz'},'directories.html':{en:'Business Directories',ar:'أدلة الأعمال',de:'Branchenverzeichnisse'},'smart-finder.html':{en:'Smart Site Finder',ar:'أداة اختيار المواقع',de:'Smart Site Finder'},'proposal.html':{en:'Request a proposal',ar:'اطلب عرضًا',de:'Angebot anfordern'},'seo-glossary.html':{en:'SEO Glossary',ar:'مسرد SEO',de:'SEO-Glossar'},'case-studies.html':{en:'Case studies',ar:'دراسات الحالة',de:'Fallstudien'},'publishers.html':{en:'Become a publisher',ar:'انضم كناشر',de:'Publisher werden'},'privacy-policy.html':{en:'Privacy Policy',ar:'سياسة الخصوصية',de:'Datenschutz'},'services.html':{en:'All services',ar:'جميع الخدمات',de:'Alle Leistungen'},'packages.html':{en:'Packages',ar:'الباقات',de:'Pakete'},'contact.html':{en:'Get a quote',ar:'اطلب عرضًا',de:'Angebot anfordern'},
     'seo.html':{en:'SEO',ar:'خدمات SEO',de:'SEO'},'local-seo.html':{en:'Local SEO',ar:'SEO المحلي',de:'Local SEO'},'technical-seo.html':{en:'Technical SEO',ar:'SEO التقني',de:'Technisches SEO'},'content-writing.html':{en:'Content writing',ar:'كتابة المحتوى',de:'SEO-Content'},
     'link-building.html':{en:'Link building',ar:'بناء الروابط',de:'Linkbuilding'},'guest-posting.html':{en:'Guest posting',ar:'مقالات الضيف',de:'Gastbeiträge'},'niche-edits.html':{en:'Niche edits',ar:'روابط داخل مقالات',de:'Niche Edits'},'digital-pr.html':{en:'Digital PR',ar:'العلاقات العامة الرقمية',de:'Digital PR'},'white-label.html':{en:'White-label',ar:'العلامة البيضاء',de:'White-Label'},
     'google-ads.html':{en:'Google Ads',ar:'إعلانات Google',de:'Google Ads'},'meta-ads.html':{en:'Meta Ads',ar:'إعلانات Meta',de:'Meta Ads'},'tiktok-ads.html':{en:'TikTok Ads',ar:'إعلانات TikTok',de:'TikTok Ads'},

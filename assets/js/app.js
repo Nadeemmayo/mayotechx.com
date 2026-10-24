@@ -20,97 +20,29 @@
   var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.08}):null;
   function reveal(){$$('.reveal:not(.in)').forEach(function(el){io?io.observe(el):el.classList.add('in')})}
 
-  /* ---------- forms → WhatsApp ---------- */
+  /* ---------- forms → WhatsApp or email (static hosting: no server storage) ---------- */
   function forms(){
     $$('form[data-wa]').forEach(function(f){
+      var via='wa';
+      $$('[data-via]',f).forEach(function(b){ b.addEventListener('click',function(){ via=b.getAttribute('data-via'); }); });
+      f.setAttribute('novalidate','');
       f.addEventListener('submit',function(e){
-        e.preventDefault(); if(!f.reportValidity()) return;
-        var l=['*'+f.getAttribute('data-wa')+'* — mayotechx.com',''];
-        $$('input,select,textarea',f).forEach(function(el){ if(!el.name||!el.value) return; if((el.type==='checkbox'||el.type==='radio')&&!el.checked) return; l.push('• '+el.name+': '+el.value); });
-        window.open(wa(l.join('\n')),'_blank');
+        e.preventDefault();
+        var hp=f.querySelector('.hp'); if(hp&&hp.value) return;
+        var err=f.querySelector('.form-err');
+        if(!f.checkValidity()){ var bad=f.querySelector(':invalid'); if(err){ err.hidden=false; err.textContent=(bad&&bad.type==='checkbox')?'Please accept the privacy notice to continue.':'Please complete the required fields (marked *).'; } if(bad) bad.focus(); return; }
+        if(err) err.hidden=true;
+        var title=f.getAttribute('data-wa'), l=[title+' — mayotechx.com',''];
+        $$('input,select,textarea',f).forEach(function(el){ if(!el.name||!el.value||el.classList.contains('hp')||el.name==='consent') return; if((el.type==='checkbox'||el.type==='radio')&&!el.checked) return; l.push(el.name+': '+el.value); });
+        var msg=l.join('\n');
+        try{ if(window.dataLayer) dataLayer.push({event:'form_submission',form:title,via:via}); }catch(x){}
+        if(via==='mail') location.href='mailto:'+SITE.email+'?subject='+encodeURIComponent(title)+'&body='+encodeURIComponent(msg);
+        else window.open(wa(msg),'_blank','noopener');
+        var ok=f.querySelector('.form-ok'); if(!ok){ ok=document.createElement('p'); ok.className='form-ok full'; ok.setAttribute('role','status'); (f.querySelector('.form-grid')||f).appendChild(ok); }
+        ok.innerHTML='<i class="fas fa-circle-check"></i> Your message is ready in '+(via==='mail'?'your email app':'WhatsApp')+'. Press send there to deliver it.';
       });
     });
-  }
-
-  /* ---------- helpers ---------- */
-  function fmtTraffic(s){return s||'—'}
-  function orderLink(o){return wa('Hi MayoTechX, I want to order a guest post on '+o.site+' (DR '+o.dr+', '+o.niche+'). Please share the price and turnaround.')}
-  function row(o){
-    return '<tr><td><div class="site-cell"><span class="fav">'+esc(o.site.charAt(0))+'</span><div><b>'+esc(o.site)+'</b><small>'+esc(o.lang)+' · '+esc(o.country)+'</small></div></div></td>'+
-      '<td><span class="tag">'+esc(o.niche)+'</span></td>'+
-      '<td><span class="metric-pill'+(o.dr>=80?' hi':'')+'">'+o.dr+'</span></td>'+
-      '<td><span class="metric-pill'+(o.da>=80?' hi':'')+'">'+o.da+'</span></td>'+
-      '<td>'+esc(fmtTraffic(o.traffic))+'</td>'+
-      '<td>'+esc(o.price)+'</td>'+
-      '<td><a class="btn btn-gold btn-sm" target="_blank" rel="noopener" href="'+orderLink(o)+'"><i class="fab fa-whatsapp"></i> Order</a></td></tr>';
-  }
-  function uniq(a){return a.filter(function(v,i,s){return v&&s.indexOf(v)===i}).sort()}
-  function fill(sel,vals,label){ if(!sel) return; sel.innerHTML='<option value="">'+label+'</option>'+vals.map(function(v){return '<option>'+esc(v)+'</option>'}).join(''); }
-
-  /* ---------- marketplace ---------- */
-  function market(){
-    var body=$('#invBody'); if(!body) return;
-    var f=$('#invFilters'), sortKey='dr', dir=-1;
-    fill(f.niche,uniq(INVENTORY.map(function(o){return o.niche})),'All niches');
-    fill(f.country,uniq(INVENTORY.map(function(o){return o.country})),'All countries');
-    fill(f.lang,uniq(INVENTORY.map(function(o){return o.lang})),'All languages');
-    var qs=new URLSearchParams(location.search); if(qs.get('q')) f.q.value=qs.get('q');
-    function apply(){
-      var q=(f.q.value||'').toLowerCase(), drMin=+f.drmin.value||0, daMin=+f.damin.value||0, tMin=+f.tmin.value||0;
-      var list=INVENTORY.filter(function(o){
-        if(q && (o.site+' '+o.niche+' '+o.country+' '+o.lang).toLowerCase().indexOf(q)<0) return false;
-        if(f.niche.value && o.niche!==f.niche.value) return false;
-        if(f.country.value && o.country!==f.country.value) return false;
-        if(f.lang.value && o.lang!==f.lang.value) return false;
-        if(o.dr<drMin||o.da<daMin||o.tv<tMin) return false; return true;
-      });
-      list.sort(function(a,b){ var x=sortKey==='site'?a.site.localeCompare(b.site):(a[sortKey]-b[sortKey]); return sortKey==='site'?x*-dir:x*dir; });
-      $('#invCount').innerHTML='<b>'+list.length+'</b> of '+INVENTORY.length+' listed sites';
-      body.innerHTML=list.length?list.map(row).join(''):'<tr><td colspan="7"><div class="empty"><i class="fas fa-magnifying-glass"></i><p>No listed site matches. Message us — we have many more sites on request.</p></div></td></tr>';
-    }
-    f.addEventListener('input',apply); f.addEventListener('change',apply);
-    f.addEventListener('submit',function(e){e.preventDefault();apply();$('.filters').classList.remove('open')});
-    $('#resetInv').addEventListener('click',function(){f.reset();apply()});
-    $$('table.inv th[data-sort]').forEach(function(th){th.addEventListener('click',function(){var k=th.getAttribute('data-sort'); if(sortKey===k) dir=-dir; else {sortKey=k;dir=-1} apply();})});
-    var sb=$('#invSort'); if(sb) sb.addEventListener('change',function(){var p=sb.value.split(':');sortKey=p[0];dir=+p[1];apply()});
-    var ft=$('.filter-toggle'); if(ft) ft.addEventListener('click',function(){$('.filters').classList.add('open')});
-    apply();
-  }
-
-  /* ---------- Smart Site Finder (scores listed sites against the brief) ---------- */
-  var SYN={tech:['tech','technology','software','saas','it','ai','app'],news:['news','media','magazine','press','journal'],business:['business','finance','startup','marketing'],health:['health','medical','fitness'],travel:['travel','tourism'],sports:['sports','sport','football','cricket'],gaming:['gaming','games','casino','igaming']};
-  function score(o,brief){
-    var s=0, n=(o.niche||'').toLowerCase(), words=(brief.topic||'').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
-    if(words.length){ var hit=words.some(function(w){ if(n.indexOf(w)>=0) return true; for(var k in SYN){ if(SYN[k].indexOf(w)>=0 && (n.indexOf(k)>=0 || SYN[k].indexOf(n)>=0)) return true; } return false; }); s+= hit?40:8; } else s+=25;
-    var dr=brief.dr||0; s+= o.dr>=dr ? 25 - Math.min(10,(o.dr-dr)/5) : Math.max(0,25-(dr-o.dr)*2);
-    if(brief.country){ s+= o.country.toLowerCase()===brief.country.toLowerCase()?20:(o.country==='Global'?12:4) } else s+=15;
-    if(brief.lang){ s+= o.lang.toLowerCase()===brief.lang.toLowerCase()?15:0 } else s+=10;
-    s+= Math.min(10, Math.log10(Math.max(1,o.tv))*1.2);
-    return Math.max(1,Math.min(99,Math.round(s)));
-  }
-  function finder(){
-    var form=$('#finderForm'), out=$('#finderOut'); if(!form) return;
-    fill(form.country,uniq(INVENTORY.map(function(o){return o.country})),'Any country');
-    fill(form.lang,uniq(INVENTORY.map(function(o){return o.lang})),'Any language');
-    function run(){
-      var b={topic:form.topic.value,dr:+form.dr.value||0,country:form.country.value,lang:form.lang.value};
-      var list=INVENTORY.map(function(o){return {o:o,s:score(o,b)}}).sort(function(a,c){return c.s-a.s}).slice(0,6);
-      out.innerHTML='<p class="muted" style="margin-bottom:14px;font-size:.9rem">Top matches from our listed sites for <b style="color:var(--text)">'+esc(b.topic||'any topic')+'</b>'+(b.dr?' · DR '+b.dr+'+':'')+'</p>'+list.map(function(m){return '<div class="match"><span class="fav">'+esc(m.o.site.charAt(0))+'</span><div class="info"><b>'+esc(m.o.site)+'</b><small>'+esc(m.o.niche)+' · DR '+m.o.dr+' · '+esc(m.o.country)+' · '+esc(m.o.traffic)+' traffic</small><div class="bar"><span style="width:'+m.s+'%"></span></div></div><span class="pct">'+m.s+'%</span><a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="'+orderLink(m.o)+'">Order</a></div>'}).join('')+
-        '<a class="btn btn-wa" style="margin-top:8px" target="_blank" rel="noopener" href="'+wa('Hi MayoTechX, please send me a custom site list. Topic: '+(b.topic||'-')+', DR '+(b.dr||'any')+'+, country: '+(b.country||'any')+', language: '+(b.lang||'any')+'.')+'"><i class="fab fa-whatsapp"></i> Get a full custom list</a>';
-    }
-    form.addEventListener('submit',function(e){e.preventDefault();run()});
-    form.addEventListener('change',run);
-    run();
-  }
-  function heroConsole(){
-    var box=$('#consoleRows'), inp=$('#consoleQ'); if(!box) return;
-    function draw(){
-      var t=(inp&&inp.value)||'news';
-      var list=INVENTORY.map(function(o){return {o:o,s:score(o,{topic:t,dr:70})}}).sort(function(a,b){return b.s-a.s}).slice(0,4);
-      box.innerHTML=list.map(function(m){return '<div class="c-row"><b>'+esc(m.o.site)+'</b><span class="score">'+m.o.dr+'</span><span>'+esc(m.o.traffic)+'</span><span class="tag gold">'+m.s+'% match</span></div>'}).join('');
-    }
-    if(inp){ inp.addEventListener('input',draw); $('#consoleGo').addEventListener('click',function(){location.href='smart-finder.html?topic='+encodeURIComponent(inp.value)}); }
-    draw();
+    var ft=document.querySelector('form[data-funnel]'); if(ft){ var q=new URLSearchParams(location.search).get('type'); var s=ft.querySelector('[name="Request type"]'); if(q&&s){ $$('option',s).forEach(function(o){ if(o.getAttribute('data-k')===q) s.value=o.value; }); } }
   }
 
   /* ---------- tools ---------- */
@@ -144,9 +76,24 @@
     el.innerHTML='<div class="orders-track">'+items+items+'</div>'; el.classList.add('on');
   }
 
+
+  /* ---------- blog search + categories ---------- */
+  function blogFilter(){
+    var g=$('#blogGrid'); if(!g) return; var q=$('#bq'), cat='', cards=$$('.post-card',g), empty=$('#blogEmpty');
+    function run(){ var s=(q.value||'').toLowerCase().trim(), n=0; cards.forEach(function(c){ var ok=(!cat||c.getAttribute('data-cat')===cat)&&(!s||c.getAttribute('data-k').indexOf(s)>=0); c.hidden=!ok; if(ok){n++;c.classList.add('in');} }); if(empty) empty.hidden=!!n; }
+    q.addEventListener('input',run);
+    $$('.cat-btn').forEach(function(b){ b.addEventListener('click',function(){ $$('.cat-btn').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); cat=b.getAttribute('data-cat'); run(); }); });
+  }
+  /* ---------- desktop dropdowns: keyboard + aria ---------- */
+  function dropdowns(){
+    $$('.menu .dd').forEach(function(d){ var b=d.querySelector('button'); if(!b) return;
+      d.addEventListener('mouseenter',function(){b.setAttribute('aria-expanded','true')}); d.addEventListener('mouseleave',function(){b.setAttribute('aria-expanded','false')});
+      d.addEventListener('focusin',function(){b.setAttribute('aria-expanded','true')}); d.addEventListener('focusout',function(e){ if(!d.contains(e.relatedTarget)) b.setAttribute('aria-expanded','false'); });
+      b.addEventListener('keydown',function(e){ if(e.key==='Escape'){ b.blur(); } });
+    });
+  }
   document.addEventListener('DOMContentLoaded',function(){
-    chrome(); forms(); market(); heroConsole(); tools(); orders(); extras();
-    var t=$('#finderForm'); if(t){ var q=new URLSearchParams(location.search).get('topic'); if(q) t.topic.value=q; } finder();
+    chrome(); forms(); tools(); orders(); extras(); blogFilter(); dropdowns();
     reveal();
   });
 })();
