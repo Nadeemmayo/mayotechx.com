@@ -3,7 +3,8 @@
 These two files feed the live website. **Everything in this folder is public** — anyone can download it.
 
 - `publishers.csv` → Publisher Marketplace, Smart Site Finder, home preview
-- `directories.csv` → Business Directory marketplace
+- `directories.csv` → Directories page, “Business Directories” tab
+- `citations.csv` → Directories page, “Local Citations” tab (same columns as directories.csv)
 
 ## Never put these here
 Publisher contact, private email, internal cost, margin, negotiation notes, agreements, supplier status.
@@ -14,6 +15,9 @@ Keep them in your private Google Sheet only.
 |---|---|
 | id | unique ID, e.g. P0038 (never reuse) |
 | domain | example.com |
+| name | publication name shown in the table |
+| placement_format | e.g. Publisher offer, Do-follow offer, Press release / syndication |
+| indexed, dofollow, sponsored, llm_aeo | Yes / No (sponsored can be Discrete) |
 | niche / secondary_niches | main niche; extra niches separated by `;` |
 | country, language | e.g. United States, English |
 | da, pa, dr | numbers only; leave empty if not checked — never guess |
@@ -21,7 +25,7 @@ Keep them in your private Google Sheet only.
 | traffic_country, metric_source | e.g. "DR: Ahrefs · DA: Moz" |
 | metric_checked, last_verified | YYYY-MM-DD |
 | guest_post, niche_edit, digital_pr | `yes` if available, empty if unknown |
-| price, currency | client price (public). Empty = "Request price" |
+| price, currency | leave EMPTY — the site shows “Request price” with WhatsApp + email buttons |
 | turnaround, link_attribute, sponsored_policy, requirements, notes | public text |
 | status | `active` to show, anything else hides the row |
 

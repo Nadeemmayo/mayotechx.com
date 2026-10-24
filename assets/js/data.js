@@ -15,6 +15,7 @@ var SITE = {
   ceoEmail: "ceo@mayotechx.com",
   publishersCsvUrl: "",   /* optional: Google Sheet → File → Share → Publish to web → CSV (PUBLIC columns only) */
   directoriesCsvUrl: "",
+  citationsCsvUrl: "",
   chatbaseId: "",   /* paste your Chatbase chatbot ID here to switch on the full AI chatbot */
   social: {
     linkedin: "https://www.linkedin.com/in/menadeemmayos/",

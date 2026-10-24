@@ -41,10 +41,14 @@
   function yes(v){ return /^(y|yes|true|1|available)$/i.test(String(v||'').trim()); }
   function fmtN(n){ if(n==null) return '—'; if(n>=1e6) return (n/1e6).toFixed(n>=1e7?0:1).replace(/\.0$/,'')+'M'; if(n>=1e3) return Math.round(n/1e3)+'K'; return String(n); }
   function money(p,cur){ if(p==null) return null; var s={USD:'$',EUR:'€',GBP:'£',AED:'AED ',SAR:'SAR '}[cur||'USD']||((cur||'')+' '); return s+p.toLocaleString('en-US'); }
-  function pub(o){ o.da=num(o.da); o.pa=num(o.pa); o.dr=num(o.dr); o.tv=num(o.traffic); o.pr=num(o.price); o.gp=yes(o.guest_post); o.ne=yes(o.niche_edit); o.dp=yes(o.digital_pr); o.upd=o.last_verified||o.metric_checked||''; return o; }
+  function pub(o){ o.da=num(o.da); o.pa=num(o.pa); o.dr=num(o.dr); o.tv=num(o.traffic); o.pr=num(o.price); o.gp=yes(o.guest_post); o.ne=yes(o.niche_edit); o.dp=yes(o.digital_pr); o.df=yes(o.dofollow); o.ix=yes(o.indexed); o.sp=String(o.sponsored||''); o.ai=yes(o.llm_aeo); o.label=o.name||o.domain; o.upd=o.last_verified||o.metric_checked||''; return o; }
   function active(o){ return !o.status || /active/i.test(o.status); }
   function uniq(a){ var m={}; a.forEach(function(v){ String(v||'').split(/\s*[;|]\s*/).forEach(function(x){ if(x) m[x]=1; }); }); return Object.keys(m).sort(); }
   function opts(sel,vals,label){ if(!sel) return; var cur=sel.value; sel.innerHTML='<option value="">'+esc(label)+'</option>'+vals.map(function(v){return '<option'+(v===cur?' selected':'')+'>'+esc(v)+'</option>'}).join(''); }
+  function askPrice(o,kind){ var n=kind==='dir'?o.name+' ('+o.website+')':o.domain+(o.placement_format?' — '+o.placement_format:''); var m='Hello MayoTechX,\n\nPlease send the price and availability for '+n+'.\n\nThank you.'; return '<span class="rq"><a class="rq-wa" target="_blank" rel="noopener" href="'+wa(m)+'" title="Request price on WhatsApp" aria-label="Request price for '+esc(kind==='dir'?o.name:o.domain)+' on WhatsApp"><i class="fab fa-whatsapp"></i></a><a class="rq-mail" href="'+mail('Price request — '+(kind==='dir'?o.name:o.domain),m)+'" title="Request price by email" aria-label="Request price for '+esc(kind==='dir'?o.name:o.domain)+' by email"><i class="fas fa-envelope"></i></a></span>'; }
+  function priceCell(o,kind){ var p=kind==='dir'?money(num(o.client_price),o.currency):money(o.pr,o.currency); return p?'<b>'+p+'</b>':'<span class="rq-l">Request price</span>'+askPrice(o,kind); }
+  function mini(on,l,title){ return '<span class="av-chip'+(on?' on':'')+'" title="'+title+(on?': yes':': no / ask')+'">'+l+'</span>'; }
+  function yn(v){ v=String(v||''); return v?esc(v):'—'; }
   function fav(d){ return '<span class="fav" aria-hidden="true">'+esc((d||'?').replace(/^www\./,'').charAt(0).toUpperCase())+'</span>'; }
   function chip(on,label){ return '<span class="av-chip'+(on?' on':'')+'" title="'+(on?'Available':'Ask for availability')+'">'+(on?'<i class="fas fa-check"></i>':'<i class="fas fa-question"></i>')+label+'</span>'; }
   function loading(el,cols){ el.innerHTML=cols?'<tr><td colspan="'+cols+'"><div class="mk-state"><span class="spin"></span>Loading inventory…</div></td></tr>':'<div class="mk-state"><span class="spin"></span>Loading inventory…</div>'; }
@@ -68,9 +72,9 @@
   var KIND={pub:{key:'mx_shortlist',label:'Publisher shortlist',noun:'websites'},dir:{key:'mx_dirlist',label:'Directory shortlist',noun:'directories'}};
   var DATA={pub:[],dir:[]};
   function list(k){ return store(KIND[k].key)||[]; }
-  function setList(k,a){ store(KIND[k].key,a); renderBar(); $$('[data-sl="'+k+'"]').forEach(function(b){ var on=a.indexOf(b.getAttribute('data-id'))>=0; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); b.innerHTML=on?'<i class="fas fa-check"></i> Shortlisted':'<i class="fas fa-plus"></i> Shortlist'; }); }
+  function setList(k,a){ store(KIND[k].key,a); renderBar(); $$('[data-sl="'+k+'"]').forEach(function(b){ var on=a.indexOf(b.getAttribute('data-id'))>=0; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); b.innerHTML=on?'<i class="fas fa-check"></i><span class="slt"> Shortlisted</span>':'<i class="fas fa-plus"></i><span class="slt"> Shortlist</span>'; }); }
   function toggle(k,id){ var a=list(k), i=a.indexOf(id); if(i>=0) a.splice(i,1); else { a.push(id); track('publisher_shortlist',{kind:k,id:id}); } setList(k,a); }
-  function slBtn(k,id){ var on=list(k).indexOf(id)>=0; return '<button type="button" class="btn btn-ghost btn-sm sl-btn'+(on?' on':'')+'" data-sl="'+k+'" data-id="'+esc(id)+'" aria-pressed="'+on+'">'+(on?'<i class="fas fa-check"></i> Shortlisted':'<i class="fas fa-plus"></i> Shortlist')+'</button>'; }
+  function slBtn(k,id){ var on=list(k).indexOf(id)>=0; return '<button type="button" class="btn btn-ghost btn-sm sl-btn'+(on?' on':'')+'" data-sl="'+k+'" data-id="'+esc(id)+'" aria-pressed="'+on+'" title="Add to shortlist" aria-label="Add to shortlist">'+(on?'<i class="fas fa-check"></i><span class="slt"> Shortlisted</span>':'<i class="fas fa-plus"></i><span class="slt"> Shortlist</span>')+'</button>'; }
   document.addEventListener('click',function(e){ var b=e.target.closest('[data-sl]'); if(b){ e.preventDefault(); toggle(b.getAttribute('data-sl'),b.getAttribute('data-id')); } });
   function renderBar(){
     var bar=$('#slBar'); if(!bar){ bar=document.createElement('div'); bar.id='slBar'; bar.className='sl-bar'; document.body.appendChild(bar); }
@@ -133,12 +137,12 @@
   /* ---------- publisher details ---------- */
   function details(o){
     var row=function(l,v){ return v?'<div><dt>'+l+'</dt><dd>'+v+'</dd></div>':''; };
-    var d=modal('<div class="pd-head">'+fav(o.domain)+'<div><h2>'+esc(o.domain)+'</h2><p class="muted">'+esc([o.niche,o.secondary_niches].filter(Boolean).join(' · '))+'</p></div></div>'+
+    var d=modal('<div class="pd-head">'+fav(o.domain)+'<div><h2>'+esc(o.label)+'</h2><p class="muted">'+esc([o.niche,o.secondary_niches].filter(Boolean).join(' · '))+'</p></div></div>'+
       '<div class="pd-metrics"><div><b>'+(o.dr==null?'—':o.dr)+'</b><span>DR</span></div><div><b>'+(o.da==null?'—':o.da)+'</b><span>DA</span></div><div><b>'+(o.pa==null?'—':o.pa)+'</b><span>PA</span></div><div><b>'+fmtN(o.tv)+'</b><span>Traffic / mo</span></div></div>'+
-      '<dl class="pd-list">'+row('Country',esc(o.country))+row('Language',esc(o.language))+row('Traffic country',esc(o.traffic_country))+row('Services',chip(o.gp,'Guest post')+' '+chip(o.ne,'Niche edit')+' '+chip(o.dp,'Digital PR'))+
-        row('Price',money(o.pr,o.currency)||'Request price')+row('Turnaround',esc(o.turnaround)||'Confirmed with quote')+row('Link attribute',esc(o.link_attribute))+row('Sponsored policy',esc(o.sponsored_policy))+row('Editorial requirements',esc(o.requirements))+row('Notes',esc(o.notes))+
+      '<dl class="pd-list">'+row('Website','<span dir="ltr">'+esc(o.domain)+'</span>')+row('Placement format',esc(o.placement_format))+row('Country / market',esc(o.country)+(o.region?' · '+esc(o.region):''))+row('Language',esc(o.language))+row('Link attributes',chip(o.df,'Dofollow')+' '+chip(o.ix,'Indexed')+' '+chip(o.ai,'AI search / LLM visibility'))+row('Sponsored label',esc(o.sponsored))+row('Services',chip(o.gp,'Guest post')+' '+chip(o.ne,'Niche edit')+' '+chip(o.dp,'Digital PR'))+
+        row('Price',money(o.pr,o.currency)||('Request price '+askPrice(o,'pub')))+row('Turnaround',esc(o.turnaround)||'Confirmed with quote')+row('Link attribute',esc(o.link_attribute))+row('Sponsored policy',esc(o.sponsored_policy))+row('Editorial requirements',esc(o.requirements))+row('Notes',esc(o.notes))+
         row('Metric source',esc(o.metric_source))+row('Last verified',esc(o.upd)||'Ask us for a fresh check')+'</dl>'+
-      '<p class="pd-note"><i class="fas fa-circle-info"></i> DA, PA and DR are third-party estimates (Moz, Ahrefs), not Google ranking scores. Availability and price are confirmed before any order.</p>'+
+      '<p class="pd-note"><i class="fas fa-circle-info"></i> DA, PA and DR are third-party estimates (Moz, Ahrefs), not Google ranking scores. Metrics are as reported by the publisher network; availability and price are confirmed before any order.</p>'+
       '<div class="pd-actions">'+slBtn('pub',o.id)+'<button type="button" class="btn btn-gold btn-sm" data-req="Guest Post">Request guest post</button><button type="button" class="btn btn-ghost btn-sm" data-req="Niche Edit">Request niche edit</button>'+
       '<a class="btn btn-wa btn-sm" target="_blank" rel="noopener" href="'+wa('Hello MayoTechX, I have a question about '+o.domain+'.')+'"><i class="fab fa-whatsapp"></i> Ask a question</a><a class="btn btn-ghost btn-sm" href="'+mail('Question about '+o.domain,'Hello MayoTechX,\n\nI have a question about '+o.domain+':\n\n')+'"><i class="fas fa-envelope"></i> Email</a></div>');
     $$('[data-req]',d).forEach(function(b){ b.addEventListener('click',function(){ var a=list('pub'); if(a.indexOf(o.id)<0){a.push(o.id);setList('pub',a);} quote('pub',b.getAttribute('data-req')); }); });
@@ -150,41 +154,45 @@
   function marketplace(){
     var app=$('#mkApp'); if(!app) return;
     var f=$('#mkFilters',app), body=$('#mkBody',app), cards=$('#mkCards',app), cnt=$('#mkCount',app), pg=$('#mkPager',app), sortSel=$('#mkSort',app), page=1, all=[];
-    loading(body,8);
+    loading(body,10);
     load('publishers','publishersCsvUrl').then(function(rows){
       all=rows.map(pub).filter(active); DATA.pub=all; renderBar();
       opts(f.niche,uniq(all.map(function(o){return o.niche+';'+o.secondary_niches})),'All niches');
       opts(f.country,uniq(all.map(function(o){return o.country})),'All countries');
       opts(f.language,uniq(all.map(function(o){return o.language})),'All languages');
       var qs=new URLSearchParams(location.search); ['q','niche','country','language'].forEach(function(k){ if(qs.get(k)&&f[k]) f[k].value=qs.get(k); });
-      var tot=$('#mkTotal'); if(tot) tot.textContent=all.length;
+      var tot=$('#mkTotal'); if(tot) tot.textContent=all.length; $$('[data-inv-count]').forEach(function(e){e.textContent=all.length.toLocaleString('en-US')}); opts(f.format,uniq(all.map(function(o){return o.placement_format})),'All formats'); if(f.language){ var ls=uniq(all.map(function(o){return o.language})); if(ls.length<2) f.language.closest('.field').hidden=true; }
       apply();
     }).catch(function(){ failed(body,8,'publisher list'); cards.innerHTML=''; });
     var timer;
     function apply(){
-      var q=(f.q.value||'').toLowerCase().trim(), mDA=+f.da.value||0, mPA=+f.pa.value||0, mDR=+f.dr.value||0, maxP=+f.maxp.value||0, mT=+f.tmin.value||0;
+      var q=(f.q.value||'').toLowerCase().trim(), mDA=+f.da.value||0, mPA=f.pa?(+f.pa.value||0):0, mDR=+f.dr.value||0, maxP=+f.maxp.value||0, mT=+f.tmin.value||0;
       var res=all.filter(function(o){
-        if(q && (o.domain+' '+o.niche+' '+o.secondary_niches+' '+o.country+' '+o.language).toLowerCase().indexOf(q)<0) return false;
+        if(q && (o.domain+' '+o.name+' '+o.niche+' '+o.secondary_niches+' '+o.country+' '+o.region+' '+o.language).toLowerCase().indexOf(q)<0) return false;
+        if(f.format && f.format.value && o.placement_format!==f.format.value) return false;
+        if(f.df && f.df.checked && !o.df) return false; if(f.ix && f.ix.checked && !o.ix) return false; if(f.nosp && f.nosp.checked && !/^no$/i.test(o.sp)) return false; if(f.ai && f.ai.checked && !o.ai) return false;
         if(f.niche.value && (o.niche+';'+o.secondary_niches).split(/\s*[;|]\s*/).indexOf(f.niche.value)<0) return false;
         if(f.country.value && o.country!==f.country.value) return false;
         if(f.language.value && o.language!==f.language.value) return false;
         if(mDA && !(o.da>=mDA)) return false; if(mPA && !(o.pa>=mPA)) return false; if(mDR && !(o.dr>=mDR)) return false;
         if(maxP && !(o.pr!=null && o.pr<=maxP)) return false; if(mT && !(o.tv>=mT)) return false;
-        if(f.gp.checked && !o.gp) return false; if(f.ne.checked && !o.ne) return false; if(f.dp.checked && !o.dp) return false;
+        if(f.gp && f.gp.checked && !o.gp) return false; if(f.ne && f.ne.checked && !o.ne) return false; if(f.dp && f.dp.checked && !o.dp) return false;
         return true; });
       var sp=sortSel.value.split(':'), k=sp[0], dir=+sp[1];
       res.sort(function(a,b){ var x=a[k], y=b[k]; if(x==null&&y==null) return 0; if(x==null) return 1; if(y==null) return -1; return (typeof x==='string'?x.localeCompare(y):x-y)*dir; });
       var pages=Math.max(1,Math.ceil(res.length/PER)); if(page>pages) page=pages;
       var view=res.slice((page-1)*PER,page*PER);
       cnt.innerHTML='<b>'+res.length+'</b> of '+all.length+' publishers';
-      if(!res.length){ var e='<div class="mk-state"><i class="fas fa-magnifying-glass"></i><p>No listed publisher matches these filters. Our wider network is shared on request.</p><a class="btn btn-gold btn-sm" href="#" data-empty>Request a custom list</a></div>'; body.innerHTML='<tr><td colspan="8">'+e+'</td></tr>'; cards.innerHTML=e; $$('[data-empty]',app).forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();quote('pub');})}); }
+      if(!res.length){ var e='<div class="mk-state"><i class="fas fa-magnifying-glass"></i><p>No listed publisher matches these filters. Our wider network is shared on request.</p><a class="btn btn-gold btn-sm" href="#" data-empty>Request a custom list</a></div>'; body.innerHTML='<tr><td colspan="9">'+e+'</td></tr>'; cards.innerHTML=e; $$('[data-empty]',app).forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();quote('pub');})}); }
       else {
-        body.innerHTML=view.map(function(o){ return '<tr><td><button type="button" class="site-cell" data-pd="'+esc(o.id)+'">'+fav(o.domain)+'<span><b>'+esc(o.domain)+'</b><small>'+esc(o.language)+' · '+esc(o.country)+'</small></span></button></td><td><span class="tag">'+esc(o.niche)+'</span></td>'+
-          '<td><span class="metric-pill'+(o.dr>=80?' hi':'')+'">'+(o.dr==null?'—':o.dr)+'</span></td><td><span class="metric-pill'+(o.da>=80?' hi':'')+'">'+(o.da==null?'—':o.da)+'</span></td><td>'+fmtN(o.tv)+'</td>'+
-          '<td class="avs">'+chip(o.gp,'GP')+chip(o.ne,'NE')+chip(o.dp,'PR')+'</td><td>'+(money(o.pr,o.currency)?'<b>'+money(o.pr,o.currency)+'</b>':'<span class="muted">Request price</span>')+'</td><td class="acts">'+slBtn('pub',o.id)+'</td></tr>'; }).join('');
-        cards.innerHTML=view.map(function(o){ return '<article class="mk-card"><button type="button" class="site-cell" data-pd="'+esc(o.id)+'">'+fav(o.domain)+'<span><b>'+esc(o.domain)+'</b><small>'+esc(o.niche)+' · '+esc(o.country)+' · '+esc(o.language)+'</small></span></button>'+
-          '<div class="mk-m"><span><b>'+(o.dr==null?'—':o.dr)+'</b>DR</span><span><b>'+(o.da==null?'—':o.da)+'</b>DA</span><span><b>'+fmtN(o.tv)+'</b>Traffic</span><span><b>'+(money(o.pr,o.currency)||'—')+'</b>Price</span></div>'+
-          '<div class="avs">'+chip(o.gp,'Guest post')+chip(o.ne,'Niche edit')+chip(o.dp,'Digital PR')+'</div><div class="mk-cact">'+slBtn('pub',o.id)+'<button type="button" class="btn btn-gold btn-sm" data-pd="'+esc(o.id)+'">Details</button></div></article>'; }).join('');
+        body.innerHTML=view.map(function(o){ return '<tr><td><button type="button" class="site-cell" data-pd="'+esc(o.id)+'">'+fav(o.domain)+'<span><b>'+esc(o.label)+'</b><small dir="ltr">'+esc(o.domain)+'</small></span></button></td><td><span class="tag">'+esc(o.niche)+'</span><small class="sub" style="margin-top:4px">'+esc(o.country)+(o.region?' · '+esc(o.region):'')+'</small></td>'+
+          '<td><span class="metric-pill'+(o.da>=80?' hi':'')+'">'+(o.da==null?'—':o.da)+'</span></td><td><span class="metric-pill'+(o.dr>=80?' hi':'')+'">'+(o.dr==null?'—':o.dr)+'</span></td><td class="num">'+fmtN(o.tv)+'</td>'+
+          
+          '<td class="avs">'+mini(o.df,'DF','Dofollow')+mini(o.ix,'IDX','Indexed in Google')+mini(o.ai,'AI','Visible in AI search')+(o.sp&&!/^no$/i.test(o.sp)?'<span class="av-chip warn" title="Sponsored label: '+esc(o.sp)+'">SP</span>':'')+'</td>'+
+          '<td class="tat">'+(o.turnaround?esc(o.turnaround):'—')+'</td><td class="price">'+priceCell(o,'pub')+'</td><td class="acts">'+slBtn('pub',o.id)+'</td></tr>'; }).join('');
+        cards.innerHTML=view.map(function(o){ return '<article class="mk-card"><button type="button" class="site-cell" data-pd="'+esc(o.id)+'">'+fav(o.domain)+'<span><b>'+esc(o.label)+'</b><small>'+esc(o.domain)+' · '+esc(o.niche)+' · '+esc(o.country)+'</small></span></button>'+
+          '<div class="mk-m"><span><b>'+(o.da==null?'—':o.da)+'</b>DA</span><span><b>'+(o.dr==null?'—':o.dr)+'</b>DR</span><span><b>'+fmtN(o.tv)+'</b>Traffic</span><span><b>'+(o.turnaround?esc(o.turnaround):'—')+'</b>TAT</span></div>'+
+          '<div class="avs">'+chip(o.df,'Dofollow')+chip(o.ix,'Indexed')+chip(o.ai,'AI search')+'</div><div class="mk-price"><span>Price</span>'+priceCell(o,'pub')+'</div><div class="mk-cact">'+slBtn('pub',o.id)+'<button type="button" class="btn btn-gold btn-sm" data-pd="'+esc(o.id)+'">Details</button></div></article>'; }).join('');
       }
       pg.innerHTML=pages>1?('<button type="button" data-p="'+(page-1)+'"'+(page===1?' disabled':'')+' aria-label="Previous page"><i class="fas fa-chevron-left"></i></button><span>Page '+page+' of '+pages+'</span><button type="button" data-p="'+(page+1)+'"'+(page===pages?' disabled':'')+' aria-label="Next page"><i class="fas fa-chevron-right"></i></button>'):'';
     }
@@ -199,41 +207,55 @@
     $$('[data-quote]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); quote('pub'); }); });
   }
 
-  /* ---------- directory marketplace ---------- */
+  /* ---------- directory & local citation marketplace (two datasets, tabs) ---------- */
+  var DSRC={directories:{csv:'directories',cfg:'directoriesCsvUrl',label:'directories'},citations:{csv:'citations',cfg:'citationsCsvUrl',label:'local citation sites'}};
   function directories(){
     var app=$('#dirApp'); if(!app) return;
-    var f=$('#dirFilters',app), body=$('#dirBody',app), cards=$('#dirCards',app), cnt=$('#dirCount',app), all=[];
-    loading(body,7);
-    load('directories','directoriesCsvUrl').then(function(rows){
-      all=rows.filter(active); DATA.dir=all; renderBar();
-      opts(f.country,uniq(all.map(function(o){return o.country.split(' / ').join(';')})),'All countries');
-      opts(f.category,uniq(all.map(function(o){return o.category})),'All categories');
-      opts(f.industry,uniq(all.map(function(o){return o.industry})),'All industries');
-      opts(f.language,uniq(all.map(function(o){return o.language.split(' / ').join(';')})),'All languages');
-      apply();
-    }).catch(function(){ failed(body,7,'directory list'); });
+    var f=$('#dirFilters',app), body=$('#dirBody',app), cards=$('#dirCards',app), cnt=$('#dirCount',app), all=[], src=(location.hash==='#citations')?'citations':'directories', page=1;
+    var pg=$('#dirPager',app);
+    function loadSrc(){
+      $$('[data-src]',app).forEach(function(b){ var on=b.getAttribute('data-src')===src; b.classList.toggle('on',on); b.setAttribute('aria-selected',on); });
+      loading(body,9); cards.innerHTML='';
+      load(DSRC[src].csv,DSRC[src].cfg).then(function(rows){
+        all=rows.filter(active).map(function(o){ o.da_=num(o.da); o.pa_=num(o.pa); o.dr_=num(o.dr); o.tv=num(o.traffic); return o; });
+        DATA.dir=DATA.dir.filter(function(x){return x._src!==src}).concat(all.map(function(o){o._src=src;return o})); renderBar();
+        opts(f.country,uniq(all.map(function(o){return o.country.split(' / ').join(';')})),'All countries');
+        opts(f.category,uniq(all.map(function(o){return o.category})),'All categories');
+        opts(f.industry,uniq(all.map(function(o){return o.industry})),'All industries');
+        opts(f.language,uniq(all.map(function(o){return o.language.split(' / ').join(';')})),'All languages');
+        page=1; apply();
+      }).catch(function(){ failed(body,10,DSRC[src].label+' list'); });
+    }
     function apply(){
-      var q=(f.q.value||'').toLowerCase().trim(), type=f.type.value;
+      var q=(f.q.value||'').toLowerCase().trim(), type=f.type.value, mDA=+f.da.value||0, mDR=+f.dr.value||0, mT=+f.tmin.value||0;
       var res=all.filter(function(o){
-        if(q && (o.name+' '+o.website+' '+o.industry+' '+o.country+' '+o.city_coverage).toLowerCase().indexOf(q)<0) return false;
-        if(f.country.value && o.country.split(' / ').indexOf(f.country.value)<0 && !(o.country==='Global')) return false;
+        if(q && (o.name+' '+o.website+' '+o.industry+' '+o.country+' '+o.city_coverage+' '+o.region).toLowerCase().indexOf(q)<0) return false;
+        if(f.country.value && o.country.split(' / ').indexOf(f.country.value)<0 && o.country!=='Global') return false;
         if(f.category.value && o.category!==f.category.value) return false;
         if(f.industry.value && o.industry!==f.industry.value) return false;
         if(f.language.value && o.language.split(' / ').indexOf(f.language.value)<0 && o.language!=='Multilingual') return false;
         if(type==='free' && !/^free/i.test(o.listing_type)) return false;
         if(type==='paid' && /^free$/i.test(o.listing_type)) return false;
-        if(f.cmin.value && !(num(o.dr)>=+f.cmin.value)) return false;
+        if(mDA && !(o.da_>=mDA)) return false; if(mDR && !(o.dr_>=mDR)) return false; if(mT && !(o.tv>=mT)) return false;
         return true; });
-      cnt.innerHTML='<b>'+res.length+'</b> of '+all.length+' directories';
-      if(!res.length){ var e='<div class="mk-state"><i class="fas fa-magnifying-glass"></i><p>No directory matches. Tell us your country and industry and we will research relevant listings.</p></div>'; body.innerHTML='<tr><td colspan="7">'+e+'</td></tr>'; cards.innerHTML=e; return; }
-      body.innerHTML=res.map(function(o){ return '<tr><td><div class="site-cell">'+fav(o.name)+'<span><b>'+esc(o.name)+'</b><small dir="ltr">'+esc(o.website)+'</small></span></div></td><td>'+esc(o.country)+'</td><td><span class="tag">'+esc(o.category)+'</span></td><td>'+esc(o.industry)+'</td><td>'+esc(o.listing_type)+'</td><td>'+(o.dr?'<span class="metric-pill">'+esc(o.dr)+'</span>':'<span class="muted">—</span>')+'</td><td class="acts">'+slBtn('dir',o.id)+'</td></tr>'; }).join('');
-      cards.innerHTML=res.map(function(o){ return '<article class="mk-card"><div class="site-cell">'+fav(o.name)+'<span><b>'+esc(o.name)+'</b><small>'+esc(o.country)+' · '+esc(o.industry)+'</small></span></div><div class="mk-m two"><span><b>'+esc(o.category)+'</b>Category</span><span><b>'+esc(o.listing_type)+'</b>Listing</span></div>'+(o.requirements?'<p class="muted mk-note">'+esc(o.requirements)+'</p>':'')+'<div class="mk-cact">'+slBtn('dir',o.id)+'</div></article>'; }).join('');
+      var sp=f.sort.value.split(':'), k=sp[0], dir=+sp[1];
+      res.sort(function(a,b){ var x=a[k], y=b[k]; if(x==null&&y==null) return (a.name||'').localeCompare(b.name||''); if(x==null) return 1; if(y==null) return -1; return (typeof x==='string'?x.localeCompare(y):x-y)*dir; });
+      var pages=Math.max(1,Math.ceil(res.length/PER)); if(page>pages) page=pages; var view=res.slice((page-1)*PER,page*PER);
+      cnt.innerHTML='<b>'+res.length.toLocaleString('en-US')+'</b> of '+all.length.toLocaleString('en-US')+' '+DSRC[src].label;
+      if(!res.length){ var e='<div class="mk-state"><i class="fas fa-magnifying-glass"></i><p>No listing matches. Tell us your country and industry and we will research relevant '+DSRC[src].label+'.</p></div>'; body.innerHTML='<tr><td colspan="9">'+e+'</td></tr>'; cards.innerHTML=e; pg.innerHTML=''; return; }
+      var m=function(v){return v==null?'<span class="muted">—</span>':'<span class="metric-pill">'+v+'</span>'};
+      body.innerHTML=view.map(function(o){ return '<tr><td><div class="site-cell">'+fav(o.name)+'<span><b>'+esc(o.name)+'</b><small dir="ltr">'+esc(o.website)+'</small></span></div></td><td>'+esc(o.country)+(o.city_coverage&&o.city_coverage!=='National'?'<small class="sub">'+esc(o.city_coverage)+'</small>':'')+'</td><td><span class="tag">'+esc(o.category)+'</span><small class="sub" style="margin-top:4px">'+esc(o.industry)+'</small></td><td>'+m(o.da_)+'</td><td>'+m(o.pa_)+'</td><td>'+m(o.dr_)+'</td><td class="num">'+fmtN(o.tv)+'</td><td class="price"><span class="lt">'+esc(o.listing_type||'—')+'</span>'+priceCell(o,'dir')+'</td><td class="acts">'+slBtn('dir',o.id)+'</td></tr>'; }).join('');
+      cards.innerHTML=view.map(function(o){ return '<article class="mk-card"><div class="site-cell">'+fav(o.name)+'<span><b>'+esc(o.name)+'</b><small>'+esc(o.website)+' · '+esc(o.country)+'</small></span></div><div class="mk-m"><span><b>'+(o.da_==null?'—':o.da_)+'</b>DA</span><span><b>'+(o.pa_==null?'—':o.pa_)+'</b>PA</span><span><b>'+(o.dr_==null?'—':o.dr_)+'</b>DR</span><span><b>'+fmtN(o.tv)+'</b>Traffic</span></div><p class="muted mk-note">'+esc(o.category)+' · '+esc(o.industry)+' · '+esc(o.listing_type)+'</p>'+(o.requirements?'<p class="muted mk-note">'+esc(o.requirements)+'</p>':'')+'<div class="mk-price"><span>Price</span>'+priceCell(o,'dir')+'</div><div class="mk-cact">'+slBtn('dir',o.id)+'</div></article>'; }).join('');
+      pg.innerHTML=pages>1?('<button type="button" data-p="'+(page-1)+'"'+(page===1?' disabled':'')+' aria-label="Previous page"><i class="fas fa-chevron-left"></i></button><span>Page '+page+' of '+pages+'</span><button type="button" data-p="'+(page+1)+'"'+(page===pages?' disabled':'')+' aria-label="Next page"><i class="fas fa-chevron-right"></i></button>'):'';
     }
-    f.addEventListener('input',apply); f.addEventListener('change',apply);
+    f.addEventListener('input',function(){page=1;apply()}); f.addEventListener('change',function(){page=1;apply()});
     f.addEventListener('submit',function(e){e.preventDefault();apply();app.classList.remove('filters-open');});
-    $('#dirReset',app).addEventListener('click',function(){f.reset();apply();});
+    $('#dirReset',app).addEventListener('click',function(){f.reset();page=1;apply();});
+    pg.addEventListener('click',function(e){ var b=e.target.closest('[data-p]'); if(b&&!b.disabled){ page=+b.getAttribute('data-p'); apply(); app.scrollIntoView({behavior:'smooth',block:'start'}); } });
+    $$('[data-src]',app).forEach(function(b){ b.addEventListener('click',function(){ src=b.getAttribute('data-src'); try{history.replaceState(null,'',src==='citations'?'#citations':location.pathname)}catch(e){} f.reset(); loadSrc(); }); });
     $$('[data-filters]',app).forEach(function(b){ b.addEventListener('click',function(){ app.classList.toggle('filters-open'); }); });
     $$('[data-dquote]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); quote('dir',b.getAttribute('data-dquote')||undefined); }); });
+    loadSrc();
   }
 
   /* ---------- Smart Site Finder 2.0 ---------- */
@@ -303,7 +325,7 @@
 
   function boot(){
     marketplace(); directories(); finder(); preview();
-    if(!DATA.pub.length && (list('pub').length||list('dir').length)){ load('publishers','publishersCsvUrl').then(function(r){DATA.pub=r.map(pub).filter(active);renderBar();}).catch(function(){}); load('directories','directoriesCsvUrl').then(function(r){DATA.dir=r.filter(active);renderBar();}).catch(function(){}); }
+    if(!DATA.pub.length && (list('pub').length||list('dir').length)){ load('publishers','publishersCsvUrl').then(function(r){DATA.pub=r.map(pub).filter(active);renderBar();}).catch(function(){}); load('directories','directoriesCsvUrl').then(function(r){DATA.dir=DATA.dir.concat(r.filter(active));renderBar();}).catch(function(){}); load('citations','citationsCsvUrl').then(function(r){DATA.dir=DATA.dir.concat(r.filter(active));renderBar();}).catch(function(){}); }
     renderBar();
     $$('a[href^="https://wa.me"]').forEach(function(a){ a.addEventListener('click',function(){ track('whatsapp_click',{href:a.pathname}); }); });
     $$('a[href^="mailto:"]').forEach(function(a){ a.addEventListener('click',function(){ track('email_click',{}); }); });
