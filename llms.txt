@@ -6,6 +6,7 @@
 - [Publisher Marketplace](https://mayotechx.com/marketplace.html): searchable publishers by niche, country, language, DA, PA, DR, traffic and price
 - [Business Directories](https://mayotechx.com/directories.html): local, industry and country citation sources
 - [Smart Site Finder](https://mayotechx.com/smart-finder.html): publisher matching with score breakdown
+- [Global Markets](https://mayotechx.com/markets.html): USA, UK, Canada, Germany & DACH, Europe, UAE, Saudi Arabia & GCC, India, Pakistan, Australia, Singapore & APAC
 - [Request a Proposal](https://mayotechx.com/proposal.html)
 - [Pricing & engagement models](https://mayotechx.com/packages.html)
 

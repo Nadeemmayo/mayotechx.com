@@ -223,6 +223,7 @@
         opts(f.category,uniq(all.map(function(o){return o.category})),'All categories');
         opts(f.industry,uniq(all.map(function(o){return o.industry})),'All industries');
         opts(f.language,uniq(all.map(function(o){return o.language.split(' / ').join(';')})),'All languages');
+        var qd=new URLSearchParams(location.search).get('country'); if(qd&&f.country){ for(var oi=0;oi<f.country.options.length;oi++){ if(f.country.options[oi].value===qd){ f.country.value=qd; break; } } }
         page=1; apply();
       }).catch(function(){ failed(body,10,DSRC[src].label+' list'); });
     }
