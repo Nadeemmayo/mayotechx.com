@@ -20,6 +20,6 @@ Forms open WhatsApp with the details filled in — no server needed.
 
 ## v11 (Nov 2026) — agency refresh
 - Homepage re-sequenced: concrete headline, two buyer journeys (Get a Proposal / Explore Publishers), six service areas, labelled illustrative deliverable, process and ownership.
-- Six service areas (nav, footer, hub and homepage derive from one list). New pages: `ai-search-visibility.html` (AEO & GEO), `article-writing.html`, `performance-marketing.html`.
+- Seven service areas, 74 services (nav, footer, hub and homepage derive from one list). New pages: `ai-search-visibility.html` (AEO & GEO), `article-writing.html`, `performance-marketing.html`.
 - Service CTAs carry the service into `proposal.html?type=…&from=…`; marketplace shortlists carry `pubs=…`. "Request price" is now "Check availability"; listings are not presented as confirmed placements.
 - Illustrative examples are always labelled. English pages only; other languages unchanged. Rollback point: commit f66fc7a (v10).

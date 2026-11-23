@@ -1017,3 +1017,15 @@ html{overflow-x:clip}
 html[lang=ar] .hero2 h1{font-size:clamp(2rem,3.9vw,3.2rem);line-height:1.35;letter-spacing:0}
 html[lang=ja] .hero2 h1,html[lang=zh] .hero2 h1{font-size:clamp(2rem,4vw,3.3rem);line-height:1.25;letter-spacing:0}
 html[lang=de] .hero2 h1{font-size:clamp(2.1rem,4.4vw,3.6rem)}
+/* v12 seven-area mega menu and hub */
+.dd-panel.mega.mega7{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 8px;padding:18px}
+.mega7 a{padding:6px 8px;align-items:center;gap:9px}
+.mega7 a > i,.mega7 a > svg{width:26px;height:26px;font-size:.72rem}
+.mega7 a b{font-size:.84rem}
+.mega7 a span{display:none}
+.mega7 .mega-all b{color:var(--blue-ink);font-weight:700}
+.mega7 .mega-cta{background:#F2F6FD;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.mega7 .mega-cta p{font-size:.85rem;color:#536179;margin:0}
+.svc-cat h3 small{font-size:.72rem;font-weight:600;color:#64748B;background:#F2F6FD;border-radius:99px;padding:3px 10px;margin-left:4px;letter-spacing:.02em}
+.svc-cat{scroll-margin-top:96px}
+@media (max-width:1180px){.dd-panel.mega.mega7{grid-template-columns:repeat(3,minmax(0,1fr))}}
