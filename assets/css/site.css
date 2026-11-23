@@ -1007,3 +1007,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 .hero2 .pill{padding:8px 22px 8px 8px;font-size:1.02rem;font-weight:700;letter-spacing:.01em;color:#fff;border-color:rgba(235,200,117,.6);background:rgba(235,200,117,.10)}
 .hero2 .pill b{font-size:.78rem;padding:7px 14px;background:linear-gradient(135deg,#F6E4B6,#EBC875 55%,#C9A35A);color:#101D3F;letter-spacing:.12em}
 @media (max-width:640px){.hero2 .pill{font-size:.92rem}}
+/* v11.3 long-label languages: keep header on one line */
+html[lang=fr] .site-header .nav,html[lang=de] .site-header .nav,html[lang=it] .site-header .nav{gap:10px}
+html[lang=fr] .site-header .menu>*>a,html[lang=fr] .site-header .menu>*>button,html[lang=de] .site-header .menu>*>a,html[lang=de] .site-header .menu>*>button,html[lang=it] .site-header .menu>*>a,html[lang=it] .site-header .menu>*>button{padding-left:8px;padding-right:8px;font-size:.88rem}
+html[lang=fr] .nav-cta .btn-sm,html[lang=de] .nav-cta .btn-sm,html[lang=it] .nav-cta .btn-sm{padding-left:14px;padding-right:14px;white-space:nowrap}
+body{overflow-x:clip}
+html{overflow-x:clip}
