@@ -1000,3 +1000,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 @media (min-width:1101px){.f-main{grid-template-columns:1.25fr repeat(4,1fr) 1.55fr}}
 .f-contact a,.f-contact span{font-size:.84rem}
 .f-contact a span span{display:inline;margin:0;overflow-wrap:normal;word-break:normal}
+
+/* v11.2 — bolder positioning label, deeper hero, palette alignment */
+:root{--navy:#101D3F}
+.hero2{background:radial-gradient(900px 520px at 85% -20%,rgba(36,84,198,.30),transparent 62%),linear-gradient(180deg,#101D3F 0%,#0F2563 100%)}
+.hero2 .pill{padding:8px 22px 8px 8px;font-size:1.02rem;font-weight:700;letter-spacing:.01em;color:#fff;border-color:rgba(235,200,117,.6);background:rgba(235,200,117,.10)}
+.hero2 .pill b{font-size:.78rem;padding:7px 14px;background:linear-gradient(135deg,#F6E4B6,#EBC875 55%,#C9A35A);color:#101D3F;letter-spacing:.12em}
+@media (max-width:640px){.hero2 .pill{font-size:.92rem}}
