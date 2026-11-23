@@ -1013,3 +1013,7 @@ html[lang=fr] .site-header .menu>*>a,html[lang=fr] .site-header .menu>*>button,h
 html[lang=fr] .nav-cta .btn-sm,html[lang=de] .nav-cta .btn-sm,html[lang=it] .nav-cta .btn-sm{padding-left:14px;padding-right:14px;white-space:nowrap}
 body{overflow-x:clip}
 html{overflow-x:clip}
+/* v11.4 non-latin hero sizing */
+html[lang=ar] .hero2 h1{font-size:clamp(2rem,3.9vw,3.2rem);line-height:1.35;letter-spacing:0}
+html[lang=ja] .hero2 h1,html[lang=zh] .hero2 h1{font-size:clamp(2rem,4vw,3.3rem);line-height:1.25;letter-spacing:0}
+html[lang=de] .hero2 h1{font-size:clamp(2.1rem,4.4vw,3.6rem)}
