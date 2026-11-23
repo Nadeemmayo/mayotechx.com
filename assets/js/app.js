@@ -42,7 +42,7 @@
         ok.innerHTML='<i class="fas fa-circle-check"></i> Your message is ready in '+(via==='mail'?'your email app':'WhatsApp')+'. Press send there to deliver it.';
       });
     });
-    var ft=document.querySelector('form[data-funnel]'); if(ft){ var q=new URLSearchParams(location.search).get('type'); var s=ft.querySelector('[name="Request type"]'); if(q&&s){ $$('option',s).forEach(function(o){ if(o.getAttribute('data-k')===q) s.value=o.value; }); } }
+    var ft=document.querySelector('form[data-funnel]'); if(ft){ (function(){ var P=new URLSearchParams(location.search), from=P.get('from'), pubs=P.get('pubs'), box=document.getElementById('ctxBox'), grid=ft.querySelector('.form-grid'); function hid(n,v){ var i=document.createElement('input'); i.type='hidden'; i.name=n; i.value=v; grid.appendChild(i); } var bits=[]; if(from){ hid('Source page',from.replace(/[^a-z0-9-]/gi,'')); bits.push('Started from: <b>'+from.replace(/[^a-z0-9-]/gi,'').replace(/-/g,' ')+'</b>'); } if(pubs){ var clean=pubs.slice(0,1500); hid('Selected publishers',clean); bits.push('Selected publishers: <b></b>'); } if(box&&bits.length){ box.innerHTML='<i class="fas fa-circle-info"></i> '+bits.join(' &middot; '); var b=box.querySelector('b:last-child'); if(pubs&&b) b.textContent=pubs.slice(0,1500); box.hidden=false; } })(); var q=new URLSearchParams(location.search).get('type'); var s=ft.querySelector('[name="Request type"]'); if(q&&s){ $$('option',s).forEach(function(o){ if(o.getAttribute('data-k')===q) s.value=o.value; }); } }
   }
 
   /* ---------- tools ---------- */

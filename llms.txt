@@ -52,3 +52,8 @@
 
 ## Notes
 - DA/PA (Moz) and DR (Ahrefs) are third-party metrics, not Google ranking scores. Rankings are never guaranteed.
+
+## New service pages
+- AI Search Visibility (AEO & GEO): https://mayotechx.com/ai-search-visibility.html
+- Article Writing: https://mayotechx.com/article-writing.html
+- Performance Marketing (Google, Meta, TikTok Ads): https://mayotechx.com/performance-marketing.html
